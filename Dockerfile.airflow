@@ -1,0 +1,25 @@
+# Airflow image with the Docker provider baked in.
+#
+# The stock image does not ship apache-airflow-providers-docker, and installing
+# it at container start (_PIP_ADDITIONAL_REQUIREMENTS) needs root and network on
+# every start. Freeze it here instead, resolved against the matching constraints
+# so the provider stays compatible with this Airflow version.
+FROM apache/airflow:2.7.2-python3.10
+
+# Same switchable index as the app image; see Dockerfile.
+ARG PIP_INDEX_URL=https://pypi.org/simple
+ENV PIP_RETRIES=10 \
+    PIP_TIMEOUT=120
+
+USER airflow
+RUN pip install --no-cache-dir --index-url "$PIP_INDEX_URL" \
+        "apache-airflow-providers-docker" \
+        --constraint "https://raw.githubusercontent.com/apache/airflow/constraints-2.7.2/constraints-3.10.txt"
+
+# Sidecar entrypoint used by the `airflow-logs` compose service.
+COPY --chown=airflow:root scripts/forward_airflow_logs.py /opt/forward_airflow_logs.py
+
+# Startup wrapper: clears stale pid files and applies AIRFLOW_ADMIN_* before
+# standalone starts. See the script for why the password cannot come from
+# `airflow standalone` alone.
+COPY --chown=airflow:root scripts/airflow_bootstrap.sh /opt/airflow_bootstrap.sh

@@ -1,0 +1,11 @@
+# Dependency source of truth: pyproject.toml.
+# This file is kept as a pointer for tooling that still reads requirements.txt.
+#
+# Service image:
+.[all]
+#
+# Development / CI (no torch, no PDF extractor):
+# -e .[dev,stores]
+#
+# Airflow image only:
+# -e .[airflow]

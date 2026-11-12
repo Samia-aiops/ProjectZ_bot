@@ -1,0 +1,949 @@
+{
+  "version": 2,
+  "concepts": [
+    {
+      "id": "file_attachment",
+      "canonical": "file attachment",
+      "category": "faq_topic",
+      "terms": [
+        "attachment",
+        "attachments",
+        "attach a file",
+        "attach file",
+        "attached file",
+        "upload a file"
+      ]
+    },
+    {
+      "id": "appointment_booking",
+      "canonical": "appointment booking",
+      "category": "faq_topic",
+      "terms": [
+        "appointment",
+        "appointments",
+        "book an appointment",
+        "book a doctor",
+        "book a physician",
+        "book a visit",
+        "video appointment",
+        "video visit",
+        "telehealth visit",
+        "consultation",
+        "video consultation",
+        "video consult",
+        "virtual consultation",
+        "virtual visit",
+        "online consultation",
+        "online visit",
+        "telehealth consultation",
+        "face to face",
+        "in person",
+        "office visit",
+        "reschedule",
+        "rescheduling"
+      ]
+    },
+    {
+      "id": "appointment_booking_reschedule",
+      "canonical": "appointment booking reschedule",
+      "category": "faq_topic",
+      "terms": [
+        "reschedule my visit",
+        "move my visit",
+        "move my appointment",
+        "move my booking",
+        "change my visit",
+        "change my appointment",
+        "change my booking",
+        "modify appointment",
+        "modify visit"
+      ]
+    },
+    {
+      "id": "book_for_someone_else",
+      "canonical": "book for someone else",
+      "category": "faq_topic",
+      "terms": [
+        "book for someone else",
+        "book for a family member",
+        "book for my family",
+        "family member",
+        "family members",
+        "dependent",
+        "dependents",
+        "rather than me",
+        "instead of me",
+        "on her behalf",
+        "on his behalf"
+      ]
+    },
+    {
+      "id": "pediatrics",
+      "canonical": "pediatrics",
+      "category": "specialty",
+      "terms": [
+        "pediatrician",
+        "pediatric doctor",
+        "paediatrician",
+        "paediatric doctor",
+        "kids doctor",
+        "kid doctor",
+        "child doctor",
+        "child specialist",
+        "children's doctor",
+        "baby doctor"
+      ]
+    },
+    {
+      "id": "cardiology",
+      "canonical": "cardiology",
+      "category": "specialty",
+      "terms": ["cardiologist", "heart doctor", "heart specialist"],
+      "cui": "C0007222"
+    },
+    {
+      "id": "dermatology",
+      "canonical": "dermatology",
+      "category": "specialty",
+      "terms": ["dermatologist", "skin doctor", "skin specialist"],
+      "cui": "C0011644"
+    },
+    {
+      "id": "orthopedics",
+      "canonical": "orthopedics",
+      "category": "specialty",
+      "terms": [
+        "orthopedist",
+        "orthopedic doctor",
+        "orthopaedic doctor",
+        "bone doctor",
+        "bone specialist",
+        "joint doctor"
+      ],
+      "cui": "C0033213"
+    },
+    {
+      "id": "gynecology",
+      "canonical": "gynecology",
+      "category": "specialty",
+      "terms": [
+        "gynecologist",
+        "gynaecologist",
+        "obgyn",
+        "ob gyn",
+        "women's health doctor",
+        "women's health specialist"
+      ],
+      "cui": "C0018418"
+    },
+    {
+      "id": "neurology",
+      "canonical": "neurology",
+      "category": "specialty",
+      "terms": ["neurologist", "brain doctor", "nerve doctor"],
+      "cui": "C0027858"
+    },
+    {
+      "id": "psychiatry",
+      "canonical": "psychiatry",
+      "category": "specialty",
+      "terms": ["psychiatrist", "mental health doctor", "mental health specialist"],
+      "cui": "C0033905"
+    },
+    {
+      "id": "psychology",
+      "canonical": "psychology",
+      "category": "specialty",
+      "terms": ["psychologist", "counselor", "counsellor"]
+    },
+    {
+      "id": "dentistry",
+      "canonical": "dentistry",
+      "category": "specialty",
+      "terms": ["dentist", "dental doctor", "teeth doctor", "tooth doctor"],
+      "cui": "C0011429"
+    },
+    {
+      "id": "orthodontics",
+      "canonical": "orthodontics",
+      "category": "specialty",
+      "terms": ["orthodontist", "braces doctor"]
+    },
+    {
+      "id": "ophthalmology",
+      "canonical": "ophthalmology",
+      "category": "specialty",
+      "terms": ["ophthalmologist", "eye doctor", "eye specialist"],
+      "cui": "C0029075"
+    },
+    {
+      "id": "optometry",
+      "canonical": "optometry",
+      "category": "specialty",
+      "terms": ["optometrist"]
+    },
+    {
+      "id": "urology",
+      "canonical": "urology",
+      "category": "specialty",
+      "terms": ["urologist", "bladder doctor"],
+      "cui": "C0042076"
+    },
+    {
+      "id": "oncology",
+      "canonical": "oncology",
+      "category": "specialty",
+      "terms": ["oncologist", "cancer doctor", "cancer specialist"],
+      "cui": "C0001418"
+    },
+    {
+      "id": "endocrinology",
+      "canonical": "endocrinology",
+      "category": "specialty",
+      "terms": ["endocrinologist", "hormone doctor", "diabetes doctor", "thyroid doctor"],
+      "cui": "C0014130"
+    },
+    {
+      "id": "gastroenterology",
+      "canonical": "gastroenterology",
+      "category": "specialty",
+      "terms": ["gastroenterologist", "stomach doctor", "stomach specialist", "gut doctor", "digestive doctor"],
+      "cui": "C0017181"
+    },
+    {
+      "id": "otolaryngology",
+      "canonical": "otolaryngology",
+      "category": "specialty",
+      "terms": ["otolaryngologist", "ent", "ear nose throat doctor", "ear nose and throat doctor"]
+    },
+    {
+      "id": "pulmonology",
+      "canonical": "pulmonology",
+      "category": "specialty",
+      "terms": ["pulmonologist", "lung doctor", "lung specialist", "respiratory doctor"],
+      "cui": "C0021165"
+    },
+    {
+      "id": "rheumatology",
+      "canonical": "rheumatology",
+      "category": "specialty",
+      "terms": ["rheumatologist", "arthritis doctor"],
+      "cui": "C0035435"
+    },
+    {
+      "id": "nephrology",
+      "canonical": "nephrology",
+      "category": "specialty",
+      "terms": ["nephrologist", "kidney doctor", "kidney specialist"],
+      "cui": "C0027708"
+    },
+    {
+      "id": "hematology",
+      "canonical": "hematology",
+      "category": "specialty",
+      "terms": ["hematologist", "blood doctor"],
+      "cui": "C0018951"
+    },
+    {
+      "id": "allergy",
+      "canonical": "allergy",
+      "category": "specialty",
+      "terms": ["allergist", "allergy doctor"],
+      "cui": "C0002063"
+    },
+    {
+      "id": "infectious_disease",
+      "canonical": "infectious disease",
+      "category": "specialty",
+      "terms": ["infectious disease doctor", "infection specialist"]
+    },
+    {
+      "id": "general_medicine",
+      "canonical": "general medicine",
+      "category": "specialty",
+      "terms": [
+        "family doctor",
+        "family physician",
+        "family medicine",
+        "primary care doctor",
+        "primary care physician",
+        "general practitioner",
+        "gp",
+        "pcp"
+      ]
+    },
+    {
+      "id": "internal_medicine",
+      "canonical": "internal medicine",
+      "category": "specialty",
+      "terms": ["internist", "internal medicine doctor", "adult doctor"]
+    },
+    {
+      "id": "geriatrics",
+      "canonical": "geriatrics",
+      "category": "specialty",
+      "terms": ["geriatrician", "elderly doctor"]
+    },
+    {
+      "id": "podiatry",
+      "canonical": "podiatry",
+      "category": "specialty",
+      "terms": ["podiatrist", "foot doctor"]
+    },
+    {
+      "id": "chiropractic",
+      "canonical": "chiropractic",
+      "category": "specialty",
+      "terms": ["chiropractor"]
+    },
+    {
+      "id": "physical_therapy",
+      "canonical": "physical therapy",
+      "category": "specialty",
+      "terms": ["physical therapist", "physiotherapist", "physio"]
+    },
+    {
+      "id": "occupational_therapy",
+      "canonical": "occupational therapy",
+      "category": "specialty",
+      "terms": ["occupational therapist"]
+    },
+    {
+      "id": "speech_therapy",
+      "canonical": "speech therapy",
+      "category": "specialty",
+      "terms": ["speech therapist", "speech pathologist"]
+    },
+    {
+      "id": "audiology",
+      "canonical": "audiology",
+      "category": "specialty",
+      "terms": ["audiologist", "hearing doctor"]
+    },
+    {
+      "id": "dietetics",
+      "canonical": "dietetics",
+      "category": "specialty",
+      "terms": ["dietitian", "nutritionist"]
+    },
+    {
+      "id": "fertility",
+      "canonical": "fertility",
+      "category": "specialty",
+      "terms": ["fertility doctor", "fertility specialist"]
+    },
+    {
+      "id": "midwifery",
+      "canonical": "midwifery",
+      "category": "specialty",
+      "terms": ["midwife"]
+    },
+    {
+      "id": "sports_medicine",
+      "canonical": "sports medicine",
+      "category": "specialty",
+      "terms": ["sports doctor", "sports medicine doctor"]
+    },
+    {
+      "id": "plastic_surgery",
+      "canonical": "plastic surgery",
+      "category": "specialty",
+      "terms": ["plastic surgeon", "cosmetic surgeon"]
+    },
+    {
+      "id": "neurosurgery",
+      "canonical": "neurosurgery",
+      "category": "specialty",
+      "terms": ["neurosurgeon", "brain surgeon"]
+    },
+    {
+      "id": "general_surgery",
+      "canonical": "general surgery",
+      "category": "specialty",
+      "terms": ["surgeon", "general surgeon"]
+    },
+    {
+      "id": "proctology",
+      "canonical": "proctology",
+      "category": "specialty",
+      "terms": ["proctologist", "colorectal surgeon"]
+    },
+    {
+      "id": "vascular_surgery",
+      "canonical": "vascular surgery",
+      "category": "specialty",
+      "terms": ["vascular surgeon"]
+    },
+    {
+      "id": "pain_management",
+      "canonical": "pain management",
+      "category": "specialty",
+      "terms": ["pain doctor", "pain specialist"]
+    },
+    {
+      "id": "sleep_medicine",
+      "canonical": "sleep medicine",
+      "category": "specialty",
+      "terms": ["sleep doctor", "sleep specialist"]
+    },
+    {
+      "id": "urgent_care",
+      "canonical": "urgent care",
+      "category": "specialty",
+      "terms": ["urgent care doctor", "walk in clinic"]
+    },
+    {
+      "id": "emergency_medicine",
+      "canonical": "emergency medicine",
+      "category": "specialty",
+      "terms": ["emergency doctor", "er doctor"]
+    },
+    {
+      "id": "hypertension",
+      "canonical": "hypertension",
+      "category": "condition",
+      "terms": ["high blood pressure", "high bp", "hbp"],
+      "cui": "C0020538"
+    },
+    {
+      "id": "hypotension",
+      "canonical": "hypotension",
+      "category": "condition",
+      "terms": ["low blood pressure"],
+      "cui": "C0020649"
+    },
+    {
+      "id": "arrhythmia",
+      "canonical": "arrhythmia",
+      "category": "condition",
+      "terms": ["irregular heartbeat"],
+      "cui": "C0003811"
+    },
+    {
+      "id": "atrial_fibrillation",
+      "canonical": "atrial fibrillation",
+      "category": "condition",
+      "terms": ["afib"],
+      "cui": "C0004238"
+    },
+    {
+      "id": "tachycardia",
+      "canonical": "tachycardia",
+      "category": "condition",
+      "terms": ["fast heart rate"],
+      "cui": "C0039231"
+    },
+    {
+      "id": "bradycardia",
+      "canonical": "bradycardia",
+      "category": "condition",
+      "terms": ["slow heart rate"],
+      "cui": "C0428977"
+    },
+    {
+      "id": "diabetes",
+      "canonical": "diabetes",
+      "category": "condition",
+      "terms": ["diabetic", "high blood sugar"],
+      "cui": "C0011849"
+    },
+    {
+      "id": "prediabetes",
+      "canonical": "prediabetes",
+      "category": "condition",
+      "terms": ["pre diabetes"],
+      "cui": "C0366781"
+    },
+    {
+      "id": "asthma",
+      "canonical": "asthma",
+      "category": "condition",
+      "terms": [],
+      "cui": "C0004096"
+    },
+    {
+      "id": "copd",
+      "canonical": "copd",
+      "category": "condition",
+      "terms": ["chronic obstructive pulmonary disease"],
+      "cui": "C0024117"
+    },
+    {
+      "id": "eczema",
+      "canonical": "eczema",
+      "category": "condition",
+      "terms": ["atopic dermatitis"],
+      "cui": "C0013595"
+    },
+    {
+      "id": "dermatitis",
+      "canonical": "dermatitis",
+      "category": "condition",
+      "terms": [],
+      "cui": "C0011603"
+    },
+    {
+      "id": "psoriasis",
+      "canonical": "psoriasis",
+      "category": "condition",
+      "terms": [],
+      "cui": "C0033860"
+    },
+    {
+      "id": "migraine",
+      "canonical": "migraine",
+      "category": "condition",
+      "terms": ["migraines"],
+      "cui": "C0009802"
+    },
+    {
+      "id": "epilepsy",
+      "canonical": "epilepsy",
+      "category": "condition",
+      "terms": [],
+      "cui": "C0014544"
+    },
+    {
+      "id": "seizure",
+      "canonical": "seizure",
+      "category": "condition",
+      "terms": ["seizures"],
+      "cui": "C0036572"
+    },
+    {
+      "id": "glaucoma",
+      "canonical": "glaucoma",
+      "category": "condition",
+      "terms": [],
+      "cui": "C0017601"
+    },
+    {
+      "id": "cataract",
+      "canonical": "cataract",
+      "category": "condition",
+      "terms": ["cataracts"],
+      "cui": "C0086543"
+    },
+    {
+      "id": "arthritis",
+      "canonical": "arthritis",
+      "category": "condition",
+      "terms": [],
+      "cui": "C0003864"
+    },
+    {
+      "id": "osteoarthritis",
+      "canonical": "osteoarthritis",
+      "category": "condition",
+      "terms": [],
+      "cui": "C0022408"
+    },
+    {
+      "id": "rheumatoid_arthritis",
+      "canonical": "rheumatoid arthritis",
+      "category": "condition",
+      "terms": ["rheumatoid"],
+      "cui": "C0003873"
+    },
+    {
+      "id": "osteoporosis",
+      "canonical": "osteoporosis",
+      "category": "condition",
+      "terms": [],
+      "cui": "C0029456"
+    },
+    {
+      "id": "endometriosis",
+      "canonical": "endometriosis",
+      "category": "condition",
+      "terms": [],
+      "cui": "C0014175"
+    },
+    {
+      "id": "fibromyalgia",
+      "canonical": "fibromyalgia",
+      "category": "condition",
+      "terms": [],
+      "cui": "C0016053"
+    },
+    {
+      "id": "crohn_disease",
+      "canonical": "crohn disease",
+      "category": "condition",
+      "terms": ["crohn's disease", "crohns disease", "crohn"],
+      "cui": "C0009324"
+    },
+    {
+      "id": "colitis",
+      "canonical": "colitis",
+      "category": "condition",
+      "terms": [],
+      "cui": "C0009319"
+    },
+    {
+      "id": "hepatitis",
+      "canonical": "hepatitis",
+      "category": "condition",
+      "terms": [],
+      "cui": "C0019158"
+    },
+    {
+      "id": "cirrhosis",
+      "canonical": "cirrhosis",
+      "category": "condition",
+      "terms": [],
+      "cui": "C0023890"
+    },
+    {
+      "id": "anemia",
+      "canonical": "anemia",
+      "category": "condition",
+      "terms": ["anaemia"],
+      "cui": "C0002871"
+    },
+    {
+      "id": "cholesterol",
+      "canonical": "cholesterol",
+      "category": "condition",
+      "terms": ["high cholesterol"],
+      "cui": "C0008377"
+    },
+    {
+      "id": "dementia",
+      "canonical": "dementia",
+      "category": "condition",
+      "terms": [],
+      "cui": "C0497327"
+    },
+    {
+      "id": "alzheimer_disease",
+      "canonical": "alzheimer disease",
+      "category": "condition",
+      "terms": ["alzheimer's disease", "alzheimers", "alzheimer"],
+      "cui": "C0002395"
+    },
+    {
+      "id": "parkinson_disease",
+      "canonical": "parkinson disease",
+      "category": "condition",
+      "terms": ["parkinson's disease", "parkinsons", "parkinson"],
+      "cui": "C0030567"
+    },
+    {
+      "id": "autism",
+      "canonical": "autism",
+      "category": "condition",
+      "terms": ["autism spectrum disorder"],
+      "cui": "C0004352"
+    },
+    {
+      "id": "adhd",
+      "canonical": "adhd",
+      "category": "condition",
+      "terms": ["attention deficit hyperactivity disorder"],
+      "cui": "C1263846"
+    },
+    {
+      "id": "ocd",
+      "canonical": "ocd",
+      "category": "condition",
+      "terms": ["obsessive compulsive disorder"],
+      "cui": "C0028768"
+    },
+    {
+      "id": "ptsd",
+      "canonical": "ptsd",
+      "category": "condition",
+      "terms": ["post traumatic stress disorder"],
+      "cui": "C0038436"
+    },
+    {
+      "id": "bipolar_disorder",
+      "canonical": "bipolar disorder",
+      "category": "condition",
+      "terms": ["bipolar"],
+      "cui": "C0005586"
+    },
+    {
+      "id": "schizophrenia",
+      "canonical": "schizophrenia",
+      "category": "condition",
+      "terms": [],
+      "cui": "C0036341"
+    },
+    {
+      "id": "depression",
+      "canonical": "depression",
+      "category": "condition",
+      "terms": ["clinical depression"],
+      "cui": "C0011581"
+    },
+    {
+      "id": "anxiety",
+      "canonical": "anxiety",
+      "category": "condition",
+      "terms": ["anxiety disorder"],
+      "cui": "C0003467"
+    },
+    {
+      "id": "insomnia",
+      "canonical": "insomnia",
+      "category": "condition",
+      "terms": [],
+      "cui": "C0917801"
+    },
+    {
+      "id": "sleep_apnea",
+      "canonical": "sleep apnea",
+      "category": "condition",
+      "terms": ["apnea", "sleep apnoea"],
+      "cui": "C0037315"
+    },
+    {
+      "id": "reflux",
+      "canonical": "reflux",
+      "category": "condition",
+      "terms": ["acid reflux"],
+      "cui": "C0017168"
+    },
+    {
+      "id": "gerd",
+      "canonical": "gerd",
+      "category": "condition",
+      "terms": ["gastroesophageal reflux disease"],
+      "cui": "C0017168"
+    },
+    {
+      "id": "ulcer",
+      "canonical": "ulcer",
+      "category": "condition",
+      "terms": ["ulcers"],
+      "cui": "C0041582"
+    },
+    {
+      "id": "hernia",
+      "canonical": "hernia",
+      "category": "condition",
+      "terms": ["hernias"],
+      "cui": "C0019322"
+    },
+    {
+      "id": "thrombosis",
+      "canonical": "thrombosis",
+      "category": "condition",
+      "terms": ["blood clot"],
+      "cui": "C0040053"
+    },
+    {
+      "id": "embolism",
+      "canonical": "embolism",
+      "category": "condition",
+      "terms": [],
+      "cui": "C0302148"
+    },
+    {
+      "id": "aneurysm",
+      "canonical": "aneurysm",
+      "category": "condition",
+      "terms": [],
+      "cui": "C0002940"
+    },
+    {
+      "id": "leukemia",
+      "canonical": "leukemia",
+      "category": "condition",
+      "terms": ["leukaemia"],
+      "cui": "C0023418"
+    },
+    {
+      "id": "lymphoma",
+      "canonical": "lymphoma",
+      "category": "condition",
+      "terms": [],
+      "cui": "C0024299"
+    },
+    {
+      "id": "melanoma",
+      "canonical": "melanoma",
+      "category": "condition",
+      "terms": [],
+      "cui": "C0025202"
+    },
+    {
+      "id": "carcinoma",
+      "canonical": "carcinoma",
+      "category": "condition",
+      "terms": [],
+      "cui": "C0007097"
+    },
+    {
+      "id": "tumor",
+      "canonical": "tumor",
+      "category": "condition",
+      "terms": ["tumour", "tumors"],
+      "cui": "C0027651"
+    },
+    {
+      "id": "biopsy",
+      "canonical": "biopsy",
+      "category": "procedure",
+      "terms": ["biopsies"],
+      "cui": "C0005558"
+    },
+    {
+      "id": "immunization",
+      "canonical": "immunization",
+      "category": "procedure",
+      "terms": ["immunisation", "immunize", "vaccinate"],
+      "cui": "C0020971"
+    },
+    {
+      "id": "vaccination",
+      "canonical": "vaccination",
+      "category": "procedure",
+      "terms": ["vaccine", "vaccines", "vaccinations"],
+      "cui": "C0042196"
+    },
+    {
+      "id": "chemotherapy",
+      "canonical": "chemotherapy",
+      "category": "procedure",
+      "terms": ["chemo"],
+      "cui": "C0392920"
+    },
+    {
+      "id": "radiotherapy",
+      "canonical": "radiotherapy",
+      "category": "procedure",
+      "terms": ["radiation therapy"],
+      "cui": "C1522449"
+    },
+    {
+      "id": "dialysis",
+      "canonical": "dialysis",
+      "category": "procedure",
+      "terms": [],
+      "cui": "C0011946"
+    },
+    {
+      "id": "ibuprofen",
+      "canonical": "ibuprofen",
+      "category": "medication",
+      "terms": ["advil", "motrin"],
+      "cui": "C0020740"
+    },
+    {
+      "id": "acetaminophen",
+      "canonical": "acetaminophen",
+      "category": "medication",
+      "terms": ["paracetamol", "tylenol"],
+      "cui": "C0000970"
+    },
+    {
+      "id": "metformin",
+      "canonical": "metformin",
+      "category": "medication",
+      "terms": [],
+      "cui": "C0025598"
+    },
+    {
+      "id": "insulin",
+      "canonical": "insulin",
+      "category": "medication",
+      "terms": [],
+      "cui": "C0021641"
+    },
+    {
+      "id": "statin",
+      "canonical": "statin",
+      "category": "medication",
+      "terms": ["statins"],
+      "cui": "C0360714"
+    },
+    {
+      "id": "npi",
+      "canonical": "npi",
+      "category": "identifier",
+      "terms": ["national provider identifier", "national provider number"]
+    }
+  ],
+  "provider_nouns": [
+    "doctor",
+    "doctors",
+    "physician",
+    "physicians",
+    "provider",
+    "providers",
+    "specialist",
+    "specialists",
+    "clinician",
+    "clinicians",
+    "therapist",
+    "therapists",
+    "gp",
+    "pcp"
+  ],
+  "appointment_actions": [
+    "book",
+    "books",
+    "booked",
+    "booking",
+    "cancel",
+    "cancels",
+    "cancelled",
+    "canceled",
+    "cancelling",
+    "canceling",
+    "reschedule",
+    "reschedules",
+    "rescheduled",
+    "rescheduling",
+    "schedule",
+    "schedules",
+    "scheduled",
+    "scheduling",
+    "move",
+    "moves",
+    "moved",
+    "moving",
+    "change",
+    "changes",
+    "changed",
+    "changing",
+    "modify",
+    "modifies",
+    "modified",
+    "modifying",
+    "update",
+    "updates",
+    "updated",
+    "updating",
+    "manage",
+    "manages",
+    "managed",
+    "managing",
+    "confirm",
+    "confirms",
+    "confirmed",
+    "confirming",
+    "view",
+    "views",
+    "viewed",
+    "viewing"
+  ],
+  "appointment_objects": [
+    "appointment",
+    "appointments",
+    "visit",
+    "visits",
+    "consultation",
+    "consultations",
+    "consult",
+    "consults",
+    "booking",
+    "bookings"
+  ],
+  "rewrites": {
+    "face to face": "in person"
+  }
+}

@@ -1,0 +1,30 @@
+# Never ship secrets or local state in the image.
+.env
+.env.*
+airflow.db.backup
+airflow_password.backup.txt
+commands.docx
+
+# Not needed at runtime (or supplied by the compose mounts).
+tests/
+dags/
+data/
+certs/
+privileges.json
+
+# Build/test artifacts
+.git/
+.github/
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+logs/

@@ -1,0 +1,135 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "chat-search"
+version = "3.1.0"
+description = "Multi-tenant FAQ assistant: hybrid document RAG over Qdrant, SSE streaming and Elasticsearch provider search"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "Proprietary" }
+authors = [{ name = "AI Team" }]
+keywords = ["fastapi", "rag", "qdrant", "elasticsearch", "sse"]
+classifiers = [
+  "Private :: Do Not Upload",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Framework :: FastAPI",
+]
+dependencies = [
+  "fastapi>=0.110",
+  "uvicorn>=0.29",
+  "httpx>=0.27",
+  "pyjwt[crypto]>=2.8",
+  "pydantic>=2.0",
+  "numpy",
+  "rapidfuzz",
+  "symspellpy>=6.7",
+  "sqlglot>=25.0",
+]
+
+[project.optional-dependencies]
+# Heavy ML stack (embedding, BM25, reranker, injection guard, PII detection).
+ml = [
+  "sentence-transformers>=3.0",
+  "fastembed>=0.3",
+  "transformers>=4.40",
+  "sentencepiece",
+  "protobuf",
+  "presidio-analyzer>=2.2.358",
+]
+# PDF -> markdown extraction.
+pdf = ["pymupdf4llm>=1.28,<2"]
+# Clinical terminology: scispaCy NER and optional UMLS entity linking. The
+# model (`en_core_sci_sm`) is a separate download; without it the catalogue
+# concepts still work.
+medical = [
+  "scispacy>=0.6.2,<0.7",
+  "numpy<2",
+]
+# Vector + cache + search clients.
+stores = [
+  "qdrant-client>=1.10",
+  "redis>=5.0",
+  "elasticsearch[async]>=8.13,<9",
+  "aiomysql>=0.2",
+]
+# Airflow only needs to schedule the sync container; install in the Airflow image.
+airflow = [
+  "apache-airflow>=2.7",
+  "apache-airflow-providers-docker",
+]
+# MCP tools (streamable HTTP mounted on the API port, and the stdio server).
+mcp = ["mcp>=1.9,<2"]
+# LangGraph agent that routes each message to the RAG or provider pipeline.
+# laya is the System 1 router model.
+agent = ["langgraph>=1.0,<2", "laya>=0.4.26,<1"]
+dev = [
+  "pytest>=8",
+  "pytest-asyncio>=0.23",
+  "pytest-cov",
+  "ruff>=0.6",
+  "mypy>=1.11",
+  "types-PyJWT",
+  "types-redis",
+]
+# Everything the service image needs.
+all = [
+  "sentence-transformers>=3.0",
+  "fastembed>=0.3",
+  "transformers>=4.40",
+  "sentencepiece",
+  "protobuf",
+  "presidio-analyzer>=2.2.358",
+  "pymupdf4llm>=1.28,<2",
+  "qdrant-client>=1.10",
+  "redis>=5.0",
+  "elasticsearch[async]>=8.13,<9",
+  "aiomysql>=0.2",
+  "scispacy>=0.6.2,<0.7",
+  "numpy<2",
+  "mcp>=1.9,<2",
+  "langgraph>=1.0,<2",
+  "laya>=0.4.26,<1",
+]
+
+[project.scripts]
+chat-search = "chat_search.cli:main"
+chat-search-mcp = "chat_search.mcp_server:stdio_main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+chat_search = ["py.typed"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py311"
+extend-exclude = [".venv", "data", "certs", "dags"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "C4"]
+ignore = ["E501"]
+
+[tool.ruff.lint.flake8-bugbear]
+extend-immutable-calls = ["fastapi.Depends", "fastapi.Query", "fastapi.Path", "fastapi.Body"]
+
+[tool.pytest.ini_options]
+minversion = "8.0"
+testpaths = ["tests"]
+pythonpath = ["src"]
+asyncio_mode = "auto"
+addopts = "-ra"
+markers = [
+  "integration: needs external services (Qdrant, Redis, Elasticsearch)",
+]
+
+[tool.mypy]
+python_version = "3.11"
+files = ["src/chat_search"]
+warn_unused_ignores = true
+warn_redundant_casts = true
+ignore_missing_imports = true
+disable_error_code = ["import-untyped"]

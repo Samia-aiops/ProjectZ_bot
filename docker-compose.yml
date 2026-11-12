@@ -1,0 +1,247 @@
+name: chat_search
+
+services:
+  app:
+    build:
+      context: .
+      args:
+        PIP_INDEX_URL: ${PIP_INDEX_URL:-https://pypi.org/simple}
+    image: faq-bot:latest  # also what the Airflow DAGs run (tag/push it to your registry)
+    pull_policy: build
+    ports:
+      - "8000:8000"
+    env_file: .env
+    environment:
+      QDRANT_URL: http://qdrant:6333
+      REDIS_URL: redis://redis:6379/0
+      ES_URL: http://elasticsearch:9200
+      ES_API_KEY: ${ES_API_KEY:-}
+      ES_PROVIDERS_INDEX: ${ES_PROVIDERS_INDEX:-providers}
+      PROVIDER_SEARCH_PERMISSION: ${PROVIDER_SEARCH_PERMISSION:-providers:search}
+      # Percent-encode the password if it contains URL-reserved characters.
+      MYSQL_URL: mysql://${MYSQL_USER:-chat}:${MYSQL_PASSWORD:?Set MYSQL_PASSWORD in .env}@mysql:3306/${MYSQL_DATABASE:-chat_search}
+      # Provider operational data for Text-to-SQL. Production points this at the
+      # real read-only provider database; the local stack seeds a fixture.
+      PROVIDER_DB_URL: mysql://provider:${PROVIDER_DB_PASSWORD:-dev-provider-pass}@provider-db:3306/${PROVIDER_DB_NAME:-provider_data}
+    volumes:
+      - ./certs/http_ca.crt:/app/certs/http_ca.crt:ro
+      # Edit the file and the service picks it up within CONCEPTS_RELOAD_SECONDS.
+      - ./concepts.json:/app/concepts.json:ro
+    depends_on:
+      qdrant:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      mysql:
+        condition: service_healthy
+      provider-db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health', timeout=3)"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 180s
+    restart: unless-stopped
+
+  # One-shot PDF -> Qdrant job. Never runs as part of `up`; invoke it explicitly:
+  #   docker compose --profile indexing run --rm indexer
+  indexer:
+    profiles: ["indexing"]
+    build:
+      context: .
+      args:
+        PIP_INDEX_URL: ${PIP_INDEX_URL:-https://pypi.org/simple}
+    image: faq-bot:latest
+    pull_policy: build
+    command: ["python", "-m", "chat_search", "index-documents"]
+    env_file: .env
+    environment:
+      QDRANT_URL: http://qdrant:6333
+      REDIS_URL: redis://redis:6379/0
+      DATA_DIR: /app/data
+    volumes:
+      - ./data:/app/data:ro
+    depends_on:
+      qdrant:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  qdrant:
+    image: qdrant/qdrant:latest
+    pull_policy: missing
+    volumes:
+      - qdrant_data:/qdrant/storage
+    healthcheck:
+      test: ["CMD", "bash", "-c", ":> /dev/tcp/127.0.0.1/6333"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  # Durable per-tenant conversation history (multi-turn context). The app
+  # degrades to stateless single-turn answers while this is unreachable.
+  mysql:
+    image: mysql:8.4
+    pull_policy: missing
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-chat_search}
+      MYSQL_USER: ${MYSQL_USER:-chat}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:?Set MYSQL_PASSWORD in .env}
+      MYSQL_RANDOM_ROOT_PASSWORD: "yes"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -u$$MYSQL_USER -p$$MYSQL_PASSWORD --silent"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 30s
+
+  # Local fixture for the provider Text-to-SQL analytics feature: the five
+  # whitelisted tables, seeded for provider 'dev-provider-1' / tenant 'default'
+  # plus decoy rows. Init scripts only run on an empty volume.
+  provider-db:
+    image: mysql:8.4
+    pull_policy: missing
+    environment:
+      MYSQL_DATABASE: ${PROVIDER_DB_NAME:-provider_data}
+      MYSQL_USER: provider
+      MYSQL_PASSWORD: ${PROVIDER_DB_PASSWORD:-dev-provider-pass}
+      MYSQL_RANDOM_ROOT_PASSWORD: "yes"
+    volumes:
+      - ./scripts/dev_provider_db.sql:/docker-entrypoint-initdb.d/01-provider-data.sql:ro
+      - provider_db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -u$$MYSQL_USER -p$$MYSQL_PASSWORD --silent"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 30s
+
+  # Redis Stack (not plain Redis): the semantic cache needs RediSearch vectors.
+  # Memory is capped; only keys with a TTL (cache, rate limits) get evicted.
+  redis:
+    image: redis/redis-stack-server:latest
+    pull_policy: missing
+    environment:
+      REDIS_ARGS: "--maxmemory 256mb --maxmemory-policy volatile-lru"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  # Optional local Elasticsearch for development.
+  # Security enabled; HTTP API requires authentication over TLS.
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.15.0
+    pull_policy: missing
+    environment:
+      discovery.type: single-node
+      xpack.security.enabled: "true"
+      ELASTIC_PASSWORD: ${ELASTIC_PASSWORD:?Set ELASTIC_PASSWORD in .env}
+      ES_JAVA_OPTS: "-Xms512m -Xmx512m"
+    ports:
+      - "127.0.0.1:9200:9200"
+    volumes:
+      - es_data:/usr/share/elasticsearch/data
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - >-
+          curl -fsS -u "elastic:$${ELASTIC_PASSWORD}"
+          http://localhost:9200/_cluster/health >/dev/null
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      start_period: 90s
+
+  # --- AIRFLOW LOCAL DEVELOPMENT STACK ---
+
+  airflow:
+    build:
+      context: .
+      dockerfile: Dockerfile.airflow
+      args:
+        PIP_INDEX_URL: ${PIP_INDEX_URL:-https://pypi.org/simple}
+    image: faq-airflow:2.7.2
+    pull_policy: build
+    # Clears stale pid files and applies AIRFLOW_ADMIN_* from .env before
+    # standalone starts; standalone alone keeps the first-run password.
+    command: ["bash", "/opt/airflow_bootstrap.sh"]
+    ports:
+      - "8080:8080"
+    env_file: .env
+    volumes:
+      - airflow_data:/opt/airflow
+      - ./dags:/opt/airflow/dags
+      - //var/run/docker.sock:/var/run/docker.sock
+    # The image's airflow user (uid 50000, gid 0); gid 0 can open docker.sock,
+    # which is root:root 0660. Never run as root.
+    user: "50000:0"
+    environment:
+      - AIRFLOW__CORE__LOAD_EXAMPLES=False
+      - AIRFLOW__CORE__EXECUTOR=SequentialExecutor
+      # The web UI credentials; .env is authoritative (see Dockerfile.airflow).
+      - AIRFLOW_ADMIN_USERNAME=${AIRFLOW_ADMIN_USERNAME:-admin}
+      - AIRFLOW_ADMIN_EMAIL=${AIRFLOW_ADMIN_EMAIL:-admin@example.com}
+      - AIRFLOW_ADMIN_PASSWORD=${AIRFLOW_ADMIN_PASSWORD:-}
+      - AIRFLOW_VAR_ES_URL=http://elasticsearch:9200
+      - AIRFLOW_VAR_ES_SYNC_API_KEY=${ES_SYNC_API_KEY:-}
+      - AIRFLOW_VAR_ES_PROVIDERS_INDEX=${ES_PROVIDERS_INDEX:-providers}
+      - AIRFLOW_VAR_PROVIDERS_API_URL=${PROVIDERS_API_URL:-}
+      - AIRFLOW_VAR_PROVIDERS_API_TOKEN=${PROVIDERS_API_TOKEN:-}
+      - AIRFLOW_VAR_PROVIDERS_API_TENANT=${PROVIDERS_API_TENANT:-}
+      - AIRFLOW_VAR_PROVIDERS_API_PAGE_SIZE=${PROVIDERS_API_PAGE_SIZE:-100}
+      - AIRFLOW_VAR_PROVIDERS_API_ITEMS_KEY=${PROVIDERS_API_ITEMS_KEY:-data}
+      - AIRFLOW_VAR_PROVIDERS_API_PARAMS=${PROVIDERS_API_PARAMS:-}
+      - AIRFLOW_VAR_PROVIDERS_FIELD_MAP=${PROVIDERS_FIELD_MAP:-}
+      - AIRFLOW_VAR_PROVIDERS_API_TIMEOUT=${PROVIDERS_API_TIMEOUT:-30}
+      - AIRFLOW_VAR_PROVIDER_SYNC_MIN_RATIO=${PROVIDER_SYNC_MIN_RATIO:-0.5}
+      - AIRFLOW_VAR_QDRANT_URL=http://qdrant:6333
+      - AIRFLOW_VAR_QDRANT_API_KEY=${QDRANT_API_KEY:-}
+      - AIRFLOW_VAR_QDRANT_COLLECTION=${QDRANT_COLLECTION:-faq_documents_v2}
+      - AIRFLOW_VAR_REDIS_URL=redis://redis:6379/0
+      # Must match the serving process or the bot queries vectors no run produced.
+      - AIRFLOW_VAR_EMBEDDING_MODEL=${EMBEDDING_MODEL:-BAAI/bge-small-en-v1.5}
+      - AIRFLOW_VAR_SPARSE_MODEL=${SPARSE_MODEL:-Qdrant/bm25}
+      - AIRFLOW_VAR_CHUNK_TOKENS=${CHUNK_TOKENS:-300}
+      - AIRFLOW_VAR_CHUNK_MAX_TOKENS=${CHUNK_MAX_TOKENS:-380}
+      - AIRFLOW_VAR_CHUNK_OVERLAP_TOKENS=${CHUNK_OVERLAP_TOKENS:-40}
+      - AIRFLOW_VAR_MIN_CHUNK_TOKENS=${MIN_CHUNK_TOKENS:-60}
+      - AIRFLOW_VAR_WHOLE_DOC_TOKENS=${WHOLE_DOC_TOKENS:-350}
+      # Absolute HOST path to the PDFs (DockerOperator mounts it into the index container).
+      - DOCUMENTS_PATH=${DOCUMENTS_PATH:-/opt/chat_search/data}
+      - AIRFLOW_VAR_INDEX_IMAGE=${INDEX_IMAGE:-faq-bot:latest}
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+      qdrant:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  # Airflow captures task output into files under /opt/airflow/logs. This
+  # streams new task logs to stdout so `docker compose logs -f` shows DAG runs.
+  airflow-logs:
+    image: faq-airflow:2.7.2
+    pull_policy: never
+    entrypoint: ["python", "/opt/forward_airflow_logs.py"]
+    volumes:
+      - airflow_data:/opt/airflow:ro
+    user: "50000:0"
+    restart: unless-stopped
+    depends_on:
+      - airflow
+
+volumes:
+  qdrant_data:
+  redis_data:
+  mysql_data:
+  provider_db_data:
+  es_data:
+  airflow_data:

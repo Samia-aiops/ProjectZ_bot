@@ -1,0 +1,45 @@
+# Secrets and local state
+.env
+.env.*
+!.env.example
+airflow.db.backup
+airflow_password.backup.txt
+# Contains example API keys/credentials; do not commit.
+commands.docx
+product_evals_for_ai_agents.png
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+env/
+
+# Tooling caches
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+
+# Airflow local runtime
+airflow.cfg
+airflow.db
+logs/
+simple_auth_manager_passwords.json.generated
+
+# OS / editors
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+.pytest_cache/
+.ruff_cache/
+.github/
+certs/
